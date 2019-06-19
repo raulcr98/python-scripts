@@ -13,9 +13,10 @@ ip = input("Introduce la ip: ")
 while True:
     ok = do_ping(ip)
     if ok:
-        cont = 500
+        cont = 10
         while cont > 0:
-            os.system("echo -ne '\a'")
+            print('\a')
+            os.system("play -n synth 0.1 sine 880 vol 0.5")
             cont -= 1
         os.system("clear")
         print ('''
