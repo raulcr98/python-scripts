@@ -1,27 +1,23 @@
-import os
+from telegram.ext import Updater, InlineQueryHandler, CommandHandler
+import requests
+import re
 
-def do_ping(ip):
-    print ("HACIENDO PING A " + str(ip))
-    response = os.system("ping -c 1 " + ip)
-    if response == 0:
-        return True
-    else:
-        return False
+def get_url():
+    contents = requests.get('https://random.dog/woof.json').json()    
+    url = contents['url']
+    return url
 
-ip = input("Introduce la ip: ")
+def bop(bot, update):
+    url = get_url()
+    chat_id = update.message.chat_id
+    bot.send_photo(chat_id=chat_id, photo=url)
 
-while True:
-    ok = do_ping(ip)
-    if ok:
-        cont = 10
-        while cont > 0:
-            print('\a')
-            os.system("play -n synth 0.1 sine 880 vol 0.5")
-            cont -= 1
-        os.system("clear")
-        print ('''
-                ##############################################
-                ######             IP ONLINE              ####
-                ##############################################
-            ''')
-        break
+def main():
+    updater = Updater('1007564892:AAEdmzxxNQsi15wLHvRPJ-WyHyMvGXocnP0')
+    dp = updater.dispatcher
+    dp.add_handler(CommandHandler('bop',bop))
+    updater.start_polling()
+    updater.idle()
+
+if __name__ == '__main__':
+    main()
